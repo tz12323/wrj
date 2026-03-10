@@ -1,15 +1,15 @@
 cmake_minimum_required(VERSION 3.10)
 
+# ========== C++ 标准 ==========
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
 # 项目名
 project(uav_controller
     VERSION 1.0
     LANGUAGES CXX
 )
-
-# ========== C++ 标准 ==========
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
 
 # ========== 编译类型 ==========
 if(NOT CMAKE_BUILD_TYPE)
@@ -69,6 +69,11 @@ target_link_libraries(${PROJECT_NAME}
     ${ZBAR_LIBRARIES}
     ${JSONCPP_LIBRARIES}
 )
+
+# ========== 兼容性设置 ==========
+if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS "9.1")
+    target_link_libraries(${PROJECT_NAME} PRIVATE stdc++fs)
+endif()
 
 # ========== 输出信息 ==========
 message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
